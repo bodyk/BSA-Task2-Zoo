@@ -10,7 +10,7 @@ namespace Zoo
         private List<Type> animalCreatorTypes;
 
         public List<Animal> ZooAnimals { get; set; }
-        public List<ZooAction> ZooActions { get; set; }
+        public List<BaseAction> ZooActions { get; set; }
 
         private const string _inputToStart = "open";
         private const string _sDelimiter = "\n------------\n";
@@ -18,7 +18,7 @@ namespace Zoo
         public ZooView(List<Animal> animals)
         {
             ZooAnimals = animals;
-            ZooActions = new List<ZooAction>() { new AddAnimalAction(), new CureAnimalAction(), new DeleteAnimalAction(), new FeedAnimalAction()};
+            ZooActions = new List<BaseAction>() { new AddAnimalAction(), new CureAnimalAction(), new DeleteAnimalAction(), new FeedAnimalAction()};
         }
 
         public ZooView(List<Animal> animals, List<Type> animalCreatorTypes) : this(animals)
@@ -50,20 +50,20 @@ namespace Zoo
             }
         }
 
-        public void ShowInvalidError()
+        public void ShowInvalidInputError()
         {
             Console.WriteLine("Invalid user input!!!");
         }
 
         public void ShowLiveAnimals()
         {
-            Console.WriteLine(_sDelimiter);
             Console.WriteLine(_sLiveAnimals);
-
-            Console.WriteLine(string.Format("{0, -10}{1, -20}{2, -10}{3, -10}\n", "Type", "Alias", "Health", "State"));
+            const string sAnimalTemplate = "{0, -10}{1, -20}{2, -10}{3, -10}";
+            Console.WriteLine(string.Format(sAnimalTemplate, "Type", "Alias", "Health", "State"));
+            Console.WriteLine();
             foreach (Animal animal in ZooAnimals)
             {
-                Console.WriteLine(string.Format("{0, -10}{1, -20}{2, -10}{3, -10}", animal.GetType().Name, animal.Alias, animal.Health, animal.StateOfAnimal));
+                Console.WriteLine(string.Format(sAnimalTemplate, animal.GetType().Name, animal.Alias, animal.Health, animal.StateOfAnimal));
             }
             Console.WriteLine(_sDelimiter);
         }
@@ -82,6 +82,8 @@ namespace Zoo
                 {
                     break;
                 }
+                Console.Clear();
+                ShowStartHelp();
 
                 var arrUserInput = sUserInput.Split(' ');
 
@@ -90,16 +92,24 @@ namespace Zoo
                     int nCommandNumber = Convert.ToInt32(arrUserInput[0]);
                     Animal curAnimal;
 
-                    if (nCommandNumber < animalCreatorTypes.Count)
+                    if (nCommandNumber <= animalCreatorTypes.Count)
                     {
                         AnimalCreator curAnimalCreator = (AnimalCreator)Activator.CreateInstance(animalCreatorTypes[nCommandNumber - 1]);
                         curAnimal = curAnimalCreator.GetAnimal();
                         curAnimal.Alias = arrUserInput[1];
                         ZooAnimals.Add(curAnimal);
+
+                        ShowLiveAnimals();
+                    }
+                    else
+                    {
+                        ShowInvalidInputError();
                     }
                 }
-
-                ShowLiveAnimals();
+                else
+                {
+                    ShowInvalidInputError();
+                }
             } while (true);
 
             return ZooAnimals;

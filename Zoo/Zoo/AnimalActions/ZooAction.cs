@@ -4,18 +4,16 @@ using System.Text;
 
 namespace Zoo
 {
-    abstract class ZooAction
+    abstract class ZooAction: BaseAction
     {
-        public Animal CurrentAnimal { get; set; }
+        public List<Animal> Animals { get; set; }
         public ZooAction()
         {
 
         }
-        public ZooAction(Animal a)
+        public ZooAction(List<Animal> animals)
         {
-            CurrentAnimal = a;
+            Animals = animals;
         }
-        public abstract void Execute();
-        public abstract string GetActionHelp();
     }
 }

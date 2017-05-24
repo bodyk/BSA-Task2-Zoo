@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Zoo
 {
-    class FeedAnimalAction : ZooAction
+    class FeedAnimalAction : AnimalAction
     {
         public FeedAnimalAction()
         {
@@ -16,7 +16,7 @@ namespace Zoo
 
         public override void Execute()
         {
-
+            CurrentAnimal.Feed();
         }
 
         public override string GetActionHelp()

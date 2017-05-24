@@ -10,7 +10,7 @@ namespace Zoo
         {
 
         }
-        public AddAnimalAction(Animal a) : base(a)
+        public AddAnimalAction(List<Animal> animals) : base(animals)
         {
         }
 

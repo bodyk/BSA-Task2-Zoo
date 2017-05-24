@@ -10,7 +10,7 @@ namespace Zoo
         {
 
         }
-        public DeleteAnimalAction(Animal a) : base(a)
+        public DeleteAnimalAction(List<Animal> animals) : base(animals)
         {
         }
 

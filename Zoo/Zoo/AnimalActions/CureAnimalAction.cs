@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Zoo
 {
-    class CureAnimalAction : ZooAction
+    class CureAnimalAction : AnimalAction
     {
         public CureAnimalAction()
         {
@@ -16,7 +16,7 @@ namespace Zoo
 
         public override void Execute()
         {
-
+            CurrentAnimal.Cure();
         }
 
         public override string GetActionHelp()
