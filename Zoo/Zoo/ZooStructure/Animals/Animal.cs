@@ -40,6 +40,39 @@ namespace Zoo
             }
         }
 
+        public void LifeTickExecute()
+        {
+            switch (StateOfAnimal)
+            {
+                case State.SATED:
+                    StateOfAnimal = State.HUNGRY;
+                    break;
+                case State.HUNGRY:
+                    StateOfAnimal = State.SICK;
+                    break;
+                case State.SICK:
+                    Infect();
+                    break;
+                case State.DEAD:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void Infect()
+        {
+            if (Health != 0)
+            {
+                --Health;
+            }
+
+            if (Health == 0)
+            {
+                StateOfAnimal = State.DEAD;
+            }
+        }
+
         public void Cure()
         {
             if (Health + 1 <= MaxHealth)

@@ -9,19 +9,21 @@ namespace Zoo
     {
         private List<Type> animalCreatorTypes;
 
-        public List<Animal> ZooAnimals { get; set; }
+        public List<Animal> LiveAnimals { get; set; }
         public List<BaseAction> ZooActions { get; set; }
 
         private const string _inputToStart = "open";
-        private const string _sDelimiter = "\n------------\n";
-        private const string _sLiveAnimals = "Animals in Zoo:\n";
+        private const string _sDelimiter = "\n-----------------------------------------------------\n";
+        private const string _sAnimalsInZoo = "Animals in Zoo:\n";
+        private const string _sAnimalTemplate = "{0, -10}{1, -20}{2, -10}{3, -10}";
+
         public ZooView(List<Animal> animals)
         {
-            ZooAnimals = animals;
+            LiveAnimals = animals;
             ZooActions = new List<BaseAction>() { new AddAnimalAction(), new CureAnimalAction(), new DeleteAnimalAction(), new FeedAnimalAction()};
         }
 
-        public ZooView(List<Animal> animals, List<Type> animalCreatorTypes) : this(animals)
+        public ZooView(List<Animal> liveAnimals, List<Type> animalCreatorTypes) : this(liveAnimals)
         {
             this.animalCreatorTypes = animalCreatorTypes;
         }
@@ -55,17 +57,37 @@ namespace Zoo
             Console.WriteLine("Invalid user input!!!");
         }
 
-        public void ShowLiveAnimals()
+        public void ShowAnimals(List<Animal> liveAnimals, List<Animal> deadAnimals)
         {
-            Console.WriteLine(_sLiveAnimals);
-            const string sAnimalTemplate = "{0, -10}{1, -20}{2, -10}{3, -10}";
-            Console.WriteLine(string.Format(sAnimalTemplate, "Type", "Alias", "Health", "State"));
+            Console.WriteLine(_sAnimalsInZoo);
+            Console.WriteLine(string.Format(_sAnimalTemplate, "Type", "Alias", "Health", "State"));
+
             Console.WriteLine();
-            foreach (Animal animal in ZooAnimals)
-            {
-                Console.WriteLine(string.Format(sAnimalTemplate, animal.GetType().Name, animal.Alias, animal.Health, animal.StateOfAnimal));
-            }
+            ShowAnimalsInfo(liveAnimals);
+            ShowAnimalsInfo(deadAnimals);
             Console.WriteLine(_sDelimiter);
+        }
+
+        public void ShowAnimalsInfo(List<Animal> animals)
+        {
+            if (animals != null)
+            {
+                foreach (Animal animal in animals)
+                {
+                    ShowAnimal(animal);
+                }
+            }
+        }
+
+        public void ShowAnimal(Animal animal)
+        {
+            Console.WriteLine(string.Format(_sAnimalTemplate, animal.GetType().Name, animal.Alias, animal.Health, animal.StateOfAnimal));
+        }
+
+        public void ClearScreen()
+        {
+            Console.Clear();
+            ShowStartHelp();
         }
 
         public List<Animal> GetOriginAnimals()
@@ -77,11 +99,10 @@ namespace Zoo
             do
             {
                 sUserInput = Console.ReadLine();
-                Console.Clear();
-                ShowStartHelp();
+                ClearScreen();
                 if (sUserInput.ToLower() == _inputToStart)
                 {
-                    if (ZooAnimals.Count == 0)
+                    if (LiveAnimals.Count == 0)
                     {
                         ShowInvalidInputError();
                         continue;
@@ -104,9 +125,9 @@ namespace Zoo
                         AnimalCreator curAnimalCreator = (AnimalCreator)Activator.CreateInstance(animalCreatorTypes[nCommandNumber - 1]);
                         curAnimal = curAnimalCreator.GetAnimal();
                         curAnimal.Alias = arrUserInput[1];
-                        ZooAnimals.Add(curAnimal);
+                        LiveAnimals.Add(curAnimal);
 
-                        ShowLiveAnimals();
+                        ShowAnimals(LiveAnimals, null);
                     }
                     else
                     {
@@ -119,7 +140,12 @@ namespace Zoo
                 }
             } while (true);
 
-            return ZooAnimals;
+            return LiveAnimals;
+        }
+
+        public void ShowGameOver()
+        {
+            Console.WriteLine("GAME OVER");
         }
     }
 }

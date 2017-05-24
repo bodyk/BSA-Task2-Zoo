@@ -10,13 +10,13 @@ namespace Zoo
         {
 
         }
-        public DeleteAnimalAction(List<Animal> animals) : base(animals)
+        public DeleteAnimalAction(List<Animal> animals, Animal curAnimal) : base(animals, curAnimal)
         {
         }
 
         public override void Execute()
         {
-
+            Animals.Remove(CurrentAnimal);
         }
 
         public override string GetActionHelp()

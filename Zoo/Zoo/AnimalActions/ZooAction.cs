@@ -6,14 +6,15 @@ namespace Zoo
 {
     abstract class ZooAction: BaseAction
     {
-        public List<Animal> Animals { get; set; }
+        protected List<Animal> Animals { get; set; }
         public ZooAction()
         {
 
         }
-        public ZooAction(List<Animal> animals)
+        public ZooAction(List<Animal> animals, Animal curAnimal)
         {
             Animals = animals;
+            CurrentAnimal = curAnimal;
         }
     }
 }

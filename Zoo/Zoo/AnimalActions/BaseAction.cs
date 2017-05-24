@@ -6,6 +6,7 @@ namespace Zoo
 {
     abstract class BaseAction
     {
+        protected Animal CurrentAnimal { get; set; }
         public BaseAction()
         {
 

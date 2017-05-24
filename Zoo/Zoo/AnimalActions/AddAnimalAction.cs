@@ -10,13 +10,13 @@ namespace Zoo
         {
 
         }
-        public AddAnimalAction(List<Animal> animals) : base(animals)
+        public AddAnimalAction(List<Animal> animals, Animal curAnimal) : base(animals, curAnimal)
         {
         }
 
         public override void Execute()
         {
-
+            Animals.Add(CurrentAnimal);
         }
 
         public override string GetActionHelp()
