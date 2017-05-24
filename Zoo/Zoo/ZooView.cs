@@ -68,7 +68,7 @@ namespace Zoo
             Console.WriteLine(_sDelimiter);
         }
 
-        public List<Animal> GetStartAnimals()
+        public List<Animal> GetOriginAnimals()
         {
             ShowStartHelp();
             string sUserInput = "";
@@ -77,13 +77,20 @@ namespace Zoo
             do
             {
                 sUserInput = Console.ReadLine();
-
-                if (sUserInput.ToLower() == _inputToStart)
-                {
-                    break;
-                }
                 Console.Clear();
                 ShowStartHelp();
+                if (sUserInput.ToLower() == _inputToStart)
+                {
+                    if (ZooAnimals.Count == 0)
+                    {
+                        ShowInvalidInputError();
+                        continue;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
 
                 var arrUserInput = sUserInput.Split(' ');
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.Threading;
 
 namespace Zoo
 {
@@ -52,9 +53,30 @@ namespace Zoo
 
         public void OpenZoo()
         {
-            AnimalsOfZoo = ConsoleView.GetStartAnimals();
+            AnimalsOfZoo = ConsoleView.GetOriginAnimals();
 
-            
+            ProccessZooLife();
+        }
+
+        private void ProccessZooLife()
+        {
+            var autoEvent = new AutoResetEvent(false);
+            Timer t = new Timer(ZooLoopCallback, autoEvent, 0, 5000);
+            autoEvent.WaitOne();
+            t.Dispose();
+        }
+
+        private void ZooLoopCallback(object stateInfo)
+        {
+            AutoResetEvent autoEvent = (AutoResetEvent)stateInfo;
+
+            //TODO: Add main zoo logic
+
+            if (AnimalsOfZoo.Count == 0)
+            {
+                autoEvent.Set();
+            }
+
         }
     }
 }
