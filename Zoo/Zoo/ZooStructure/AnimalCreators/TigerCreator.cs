@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Zoo.ZooStructure.AnimalCreators
+namespace Zoo
 {
     class TigerCreator: AnimalCreator
     {
