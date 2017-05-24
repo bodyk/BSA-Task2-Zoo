@@ -21,7 +21,7 @@ namespace Zoo
 
         public override string GetActionHelp()
         {
-            return "Delete animal: name";
+            return "Delete animal: (name)";
         }
     }
 }

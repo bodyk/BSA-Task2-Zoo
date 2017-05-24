@@ -21,7 +21,7 @@ namespace Zoo
 
         public override string GetActionHelp()
         {
-            return "Feed animal: name";
+            return "Feed animal: (name)";
         }
     }
 }

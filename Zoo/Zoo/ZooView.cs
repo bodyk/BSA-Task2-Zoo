@@ -1,25 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace Zoo
 {
     class ZooView
     {
+        private List<Type> animalCreatorTypes;
+
         public List<Animal> ZooAnimals { get; set; }
         public List<ZooAction> ZooActions { get; set; }
+
+        private const string _inputToStart = "open";
+        private const string _sDelimiter = "\n------------\n";
+        private const string _sLiveAnimals = "Animals in Zoo:\n";
         public ZooView(List<Animal> animals)
         {
             ZooAnimals = animals;
             ZooActions = new List<ZooAction>() { new AddAnimalAction(), new CureAnimalAction(), new DeleteAnimalAction(), new FeedAnimalAction()};
         }
 
+        public ZooView(List<Animal> animals, List<Type> animalCreatorTypes) : this(animals)
+        {
+            this.animalCreatorTypes = animalCreatorTypes;
+        }
+
         public void ShowStartHelp()
         {
-            string sHelp = "Add animal to open zoo.\n";
-            sHelp += "At least one animal must be.";
+            string sHelp = $"Add animals to open zoo.\nType '{_inputToStart}' to finish animal initialization and open zoo";
+            ShowAnimalTypesInfo();
             Console.WriteLine(sHelp);
-            ShowUsualHelp();
+            Console.WriteLine(_sDelimiter);
+        }
+
+        public void ShowAnimalTypesInfo()
+        {
+            for (int i = 0; i < animalCreatorTypes.Count; i++)
+            {
+                Console.WriteLine($"{i + 1} - {animalCreatorTypes[i].Name}");
+            }
         }
 
         public void ShowUsualHelp()
@@ -33,6 +53,56 @@ namespace Zoo
         public void ShowInvalidError()
         {
             Console.WriteLine("Invalid user input!!!");
+        }
+
+        public void ShowLiveAnimals()
+        {
+            Console.WriteLine(_sDelimiter);
+            Console.WriteLine(_sLiveAnimals);
+
+            Console.WriteLine(string.Format("{0, -10}{1, -20}{2, -10}{3, -10}\n", "Type", "Alias", "Health", "State"));
+            foreach (Animal animal in ZooAnimals)
+            {
+                Console.WriteLine(string.Format("{0, -10}{1, -20}{2, -10}{3, -10}", animal.GetType().Name, animal.Alias, animal.Health, animal.StateOfAnimal));
+            }
+            Console.WriteLine(_sDelimiter);
+        }
+
+        public List<Animal> GetStartAnimals()
+        {
+            ShowStartHelp();
+            string sUserInput = "";
+            const int nCurrentParamCount = 2;
+
+            do
+            {
+                sUserInput = Console.ReadLine();
+
+                if (sUserInput.ToLower() == _inputToStart)
+                {
+                    break;
+                }
+
+                var arrUserInput = sUserInput.Split(' ');
+
+                if (arrUserInput.Length == nCurrentParamCount)
+                {
+                    int nCommandNumber = Convert.ToInt32(arrUserInput[0]);
+                    Animal curAnimal;
+
+                    if (nCommandNumber < animalCreatorTypes.Count)
+                    {
+                        AnimalCreator curAnimalCreator = (AnimalCreator)Activator.CreateInstance(animalCreatorTypes[nCommandNumber - 1]);
+                        curAnimal = curAnimalCreator.GetAnimal();
+                        curAnimal.Alias = arrUserInput[1];
+                        ZooAnimals.Add(curAnimal);
+                    }
+                }
+
+                ShowLiveAnimals();
+            } while (true);
+
+            return ZooAnimals;
         }
     }
 }

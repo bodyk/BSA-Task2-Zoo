@@ -10,14 +10,14 @@ namespace Zoo
         public ZooAction ZooAction { get; set; }
         public List<Animal> AnimalsOfZoo { get; set; }
         public ZooView ConsoleView { get; set; }
-        public readonly List<Type> AnimalTypes;
+        public readonly List<Type> AnimalCreatorTypes;
 
         private List<AnimalCreator> _creators;
 
         public ZooManager()
         {
             AnimalsOfZoo = new List<Animal>();
-            AnimalTypes = new List<Type>()
+            AnimalCreatorTypes = new List<Type>()
             {
                 typeof(BearCreator),
                 typeof(ElephantCreator) ,
@@ -27,7 +27,7 @@ namespace Zoo
                 typeof(WolfCreator)
             };
 
-            ConsoleView = new ZooView(AnimalsOfZoo);
+            ConsoleView = new ZooView(AnimalsOfZoo, AnimalCreatorTypes);
 
             _creators = new List<AnimalCreator>()
             {
@@ -52,27 +52,9 @@ namespace Zoo
 
         public void OpenZoo()
         {
-            ConsoleView.ShowStartHelp();
-            while (AnimalsOfZoo.Count == 0)
-            {
-                ProccessUserInput();
-            }
-        }
+            AnimalsOfZoo = ConsoleView.GetStartAnimals();
 
-        private void ProccessUserInput()
-        {
-            List<string> arrUserInput = Console.ReadLine().Split(' ').ToList();
-
-            if (arrUserInput.Count != 0)
-            {
-                int nCommandNumber = Convert.ToInt32(arrUserInput[0]);
-
-                if (nCommandNumber < AnimalTypes.Count)
-                {
-                    Animal curAnimal = (Animal)Activator.CreateInstance(AnimalTypes[nCommandNumber]);
-                    AnimalsOfZoo.Add(curAnimal);
-                }
-            }
+            
         }
     }
 }

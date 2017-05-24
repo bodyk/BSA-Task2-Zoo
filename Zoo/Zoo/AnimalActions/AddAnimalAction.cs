@@ -21,7 +21,7 @@ namespace Zoo
 
         public override string GetActionHelp()
         {
-            return "Add animal: name, animal type";
+            return "Add animal: (name, animal type)";
         }
     }
 }

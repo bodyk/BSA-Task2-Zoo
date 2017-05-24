@@ -21,7 +21,7 @@ namespace Zoo
 
         public override string GetActionHelp()
         {
-            return "Cure animal: name";
+            return "Cure animal: (name)";
         }
     }
 }
